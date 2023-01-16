@@ -1,0 +1,17 @@
+epochs: 100
+batch_size: 10
+optimizer: adam
+lr_rnn: 0.001
+lr_readout: 0.001
+lr_synthesiser: 0.001
+l2_norm: 0.0
+rate_reg: 0.0
+clip: 1.0
+early_stopping: False
+decay_lr: False
+lr_scale: 0.1
+lr_decay_patience: 10
+keep_hidden: False
+noisy: False
+spars_int: null
+bptt: null

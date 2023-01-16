@@ -1,0 +1,27 @@
+rnn_type: 'lstm_bp_lambda'
+n_layers: 1
+hidden_size: 30
+dropout: 0.0
+input_size: 2
+output_size: 1
+evec_scale: null
+backprop: False
+apply_sg: False
+use_etraces: False
+opt_each_trunc: False
+synth_params: 
+ synth_nhid: 50
+ bias: True
+ synth_nlayers: 0
+ synth_alpha: 0.1
+ synth_lambda: 1
+ synth_gamma: 0.9
+ sg_weight: 0.1
+ synth_opt_outputw_only: True
+ backprop_only_synth: False
+ synth_cell_grad: True
+ alpha_learning: False
+ cer_rate_reg: 0
+ nfibres: null
+
+

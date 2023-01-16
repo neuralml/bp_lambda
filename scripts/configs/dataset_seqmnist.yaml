@@ -1,0 +1,4 @@
+data_path: '/pathtomnist/MNIST'
+input_size: 28
+val_split: 0.2
+
