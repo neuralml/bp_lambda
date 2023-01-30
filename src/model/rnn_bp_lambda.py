@@ -12,7 +12,7 @@ except:
     from .eprop_synthgrad import eprop_synthgrad
 
 class rnn_bp_lambda(eprop_synthgrad):
-    def __init__(self, non_lin='tanh', *args, **kwargs):
+    def __init__(self, non_lin='identity', *args, **kwargs):
         super(rnn_bp_lambda, self).__init__(*args, **kwargs)
                    
         self.alpha = kwargs['alpha']
@@ -25,6 +25,9 @@ class rnn_bp_lambda(eprop_synthgrad):
         elif non_lin == 'relu':
             self.f = torch.relu
             self.f_prime = lambda x: torch.sign(x).clamp(0)
+        elif non_lin == 'identity':
+            self.f = lambda x: x * 1
+            self.f_prime = lambda x: torch.ones_like(x)
 
         if self.alpha > 0 and not self.backprop:
             self.init_evecs()
@@ -124,7 +127,9 @@ class rnn_bp_lambda(eprop_synthgrad):
         self.hook_counter += 1
         
         if self.record_grads:
-            if self.seqlen == 1:
+            if self.bptt is not None:
+                timestep = self.seqlen - self.hook_counter - 1 + self.timestep_real
+            elif self.seqlen == 1:
                 timestep = self.timestep_real
             else:
                 timestep = self.seqlen - self.hook_counter - 1

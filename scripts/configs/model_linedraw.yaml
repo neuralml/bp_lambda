@@ -1,4 +1,4 @@
-rnn_type: 'lstm_bp_lambda'
+rnn_type: 'rnn_bp_lambda'
 n_layers: 1
 hidden_size: 30
 dropout: 0.0
@@ -6,8 +6,8 @@ input_size: 2
 output_size: 1
 evec_scale: null
 backprop: False
-apply_sg: False
-use_etraces: False
+apply_sg: True
+use_etraces: True
 opt_each_trunc: False
 synth_params: 
  synth_nhid: 50
@@ -15,8 +15,8 @@ synth_params:
  synth_nlayers: 0
  synth_alpha: 0.1
  synth_lambda: 1
- synth_gamma: 0.9
- sg_weight: 0.5
+ synth_gamma: 1
+ sg_weight: 1
  synth_opt_outputw_only: True
  backprop_only_synth: False
  synth_cell_grad: True

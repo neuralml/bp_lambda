@@ -3,9 +3,9 @@ training_size: 1000
 test_size: 1000
 train_val_split: 0.2
 fixdata: False
-train_noise_var: 0.1
-test_noise_var: 0.1
+train_noise_var: 0.
+test_noise_var: 0.
 input_D: 10
-npoints: 3
+npoints: 1
 mag: 1
 end_only: True

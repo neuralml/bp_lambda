@@ -1,9 +1,9 @@
-epochs: 100
+epochs: 10
 batch_size: 10
 optimizer: adam
-lr_rnn: 0.001
-lr_readout: 0.001
-lr_synthesiser: 0.001
+lr_rnn: 0.0
+lr_readout: 0.0
+lr_synthesiser: 0.0001
 l2_norm: 0.0
 rate_reg: 0.0
 clip: 1.0

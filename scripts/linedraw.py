@@ -76,18 +76,20 @@ def main(_config, seed):
 
     loss, metrics = init_metrics('mse', ['mse'])
     classification = False
-
+    
     device = set_seed_and_device(seed, no_cuda)
 
     training_set, test_set, validation_set = load_dataset(batch_size=batch_size)
    
+    global model   
     model = init_model(input_size=input_size, 
                         output_size=output_size,
                         bptt=bptt, classification=classification,
                         batch_size=batch_size, seqlen=seq_len,
                         predict_last=predict_last)
-                               
+                            
     model = model.to(device=device)
+        
     print("initialised model") 
 
     if _config['dataset']['end_only']:
@@ -105,6 +107,20 @@ def main(_config, seed):
             print('#'*75)
             print("Epoch: {}".format(engine.state.epoch))   
             print('#'*75)
+            
+        first_epoch = nepoch == 1
+        if first_epoch:
+            print("recording grads")         
+        model.record_grads_(record=True, first_inst=first_epoch, batch_size=batch_size, seqlen=seq_len,
+                            epochs=epochs, nepoch=nepoch-1)
+        
+    @trainer.on(Events.EPOCH_STARTED)
+    def reset_iteration(engine):
+        model.iteration_number = -1
+    
+    @trainer.on(Events.ITERATION_STARTED)
+    def accumalate_iteration(engine):
+        model.iteration_number += 1
     
     # Exception for early termination
     @trainer.on(Events.EXCEPTION_RAISED)
@@ -131,6 +147,12 @@ def main(_config, seed):
     torch.save(model.state_dict(), final_model_path)
     ex.add_artifact(final_model_path, 'final-model.pt')
     os.remove(final_model_path)
+    
+    recorded_grads = model.recorded_grads.detach().numpy() # shape (nepochs, niterations, nbatch, ntimesteps, nunits)
+    helper_path = save_path + 'grads_temp.npy'
+    np.save(helper_path, recorded_grads)
+    ex.add_artifact(helper_path, 'grads.npy')
+    os.remove(helper_path)
 
     print("Experiment finished!")
 
